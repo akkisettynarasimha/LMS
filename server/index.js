@@ -1,6 +1,8 @@
 import cors from 'cors'
 import dotenv from 'dotenv'
 import express from 'express'
+import path from 'path'
+import { fileURLToPath } from 'url'
 import mongoose from 'mongoose'
 import nodemailer from 'nodemailer'
 import { randomBytes, scryptSync, timingSafeEqual } from 'node:crypto'
@@ -8,6 +10,9 @@ import { randomBytes, scryptSync, timingSafeEqual } from 'node:crypto'
 dotenv.config()
 
 const app = express()
+
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = path.dirname(__filename)
 const port = Number(process.env.PORT) || 5000
 const mongoUri = process.env.MONGODB_URI || ''
 const smtpHost = process.env.SMTP_HOST || process.env.EMAIL_HOST || process.env.MAIL_HOST || ''
@@ -1700,6 +1705,13 @@ app.use((error, _request, response, next) => {
 
   console.error('Unhandled API error:', error)
   return response.status(500).json({ message: 'Internal server error' })
+})
+
+// Serve front-end build (Vite `dist`) for production hosts like Render
+app.use(express.static(path.join(__dirname, '../dist')))
+
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, '../dist/index.html'))
 })
 
 const startServer = async () => {
