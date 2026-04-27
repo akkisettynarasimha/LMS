@@ -68,7 +68,6 @@ export function DashboardPage({
   const liveLeads = recentLeads.length
   const topSource = sourceBreakdown[0]
   const conversionRateValue = Number.parseFloat(metrics.conversionRate) || 0
-  const chartMax = Math.max(...stageBreakdown.map((item) => item.count), 1)
   const pulseQualityLabel = conversionRateValue >= 20 ? 'Strong' : conversionRateValue >= 10 ? 'Stable' : 'Needs focus'
   const summaryCards = [
     { label: 'Total Leads', value: metrics.total, caption: 'Live', icon: 'groups', tone: 'border-primary' },
@@ -258,7 +257,7 @@ export function DashboardPage({
 
           <div className="dashboard-recent-list">
             {recentLeads.length > 0 ? (
-              recentLeads.map((lead, index) => (
+              recentLeads.map((lead) => (
                 <div className="dashboard-recent-item" key={lead._id}>
                   <div className="dashboard-lead-avatar">{lead.name.slice(0, 1).toUpperCase()}</div>
 
@@ -298,7 +297,7 @@ export function DashboardPage({
 
           <div className="feed-list">
             {recentLeads.length > 0 ? (
-              recentLeads.map((lead, index) => (
+              recentLeads.map((lead) => (
                 <div className="feed-item" key={lead._id}>
                   <div className="feed-icon">
                     <span className="material-symbols-outlined">
