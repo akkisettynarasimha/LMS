@@ -1708,10 +1708,15 @@ app.use((error, _request, response, next) => {
 })
 
 // Serve front-end build (Vite `dist`) for production hosts like Render
-app.use(express.static(path.join(__dirname, '../dist')))
+const isProduction = process.env.NODE_ENV === 'production' || !__filename.includes('src')
+const distPath = isProduction 
+  ? path.join(__dirname, 'dist') 
+  : path.join(__dirname, '../dist')
+
+app.use(express.static(distPath))
 
 app.use((req, res) => {
-  res.sendFile(path.join(__dirname, '../dist/index.html'))
+  res.sendFile(path.join(distPath, 'index.html'))
 })
 
 const startServer = async () => {
